@@ -1,0 +1,15 @@
+{
+  "apps": [
+    {
+      "name": "server",
+      "script": "npm",
+      "args": "start",
+      "env": {
+        "NODE_ENV": "production"
+      },
+      "log_file": "/dev/null",
+      "out_file": "/dev/null",
+      "error_file": "/dev/null"
+    }
+  ]
+}
