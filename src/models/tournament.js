@@ -25,7 +25,12 @@ Tournament.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         field: 'current_rounds_of'
-    }
+    },
+    createdAt: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'created_at'
+    },
 }, {
     sequelize,
     tableName: "tournaments",

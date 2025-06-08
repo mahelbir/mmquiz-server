@@ -16,6 +16,17 @@ export default (req, res, next) => {
     res.responseJSON = (statusCode, messages = [], data = null) => {
         return res.status(statusCode).send(responseJSON(statusCode, messages, data));
     }
+    req.hasUserPermission = (userId) => {
+        if (!req.user || !userId) {
+            return false;
+        }
+        return req.user?.id === userId;
+    }
+    req.verifyUserPermission = (userId) => {
+        if (!req.hasUserPermission(userId)) {
+            return res.responseError("You do not have permission to access this resource", 403);
+        }
+    }
 
     return next();
 }

@@ -9,7 +9,7 @@ import config from './src/config/config.js';
 import scripter from './src/core/scripter.js';
 import router from './src/core/router.js';
 import packages from "./src/config/packages.js";
-import {responseError} from "./src/middlewares/global-middleware.js";
+import {responseError, responseJSON} from "./src/middlewares/global-middleware.js";
 import models from "./src/models/models.js";
 
 
@@ -60,7 +60,9 @@ app.use(function (err, req, res, next) {
     try {
         const status = err.status || 500;
         const stack = req.app.get('env') === 'development' ? err.stack : '';
-        return res.responseJSON(status, err.message, stack);
+        return res
+            .status(status)
+            .send(responseJSON(status, err.message, stack));
     } catch {
         return res
             .status(500)

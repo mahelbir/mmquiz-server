@@ -5,12 +5,14 @@ import Selection from "../models/selection.js";
 import Pick from "../models/pick.js";
 import {Op} from "sequelize";
 import {sequelize} from "../config/database.js";
+import Game, {GameVisibility} from "../models/game.js";
+import {time} from "melperjs";
 
 
 const router = await newRoute("/tournaments", [basicAuthMiddleware]);
 
 router.post("/start", async (req, res) => {
-    const gameId = +req.body.gameId;
+    const gameId = Math.max(+req.body.gameId, 0);
     const roundsOf = +req.body.roundsOf;
 
     if (!roundsOf || roundsOf < 2 || (roundsOf & (roundsOf - 1)) !== 0) {
@@ -20,19 +22,28 @@ router.post("/start", async (req, res) => {
     if (!gameId) {
         return res.responseError("Invalid game")
     }
+    const game = await Game.findByPk(gameId);
+    if (!game) {
+        return res.responseError("Game not found");
+    }
+    if (game.visibility === GameVisibility.PRIVATE) {
+        return res.responseError("Game is not available");
+    }
+
+    const totalSelectionCount = await Selection.count({where: {gameId}});
+    if (totalSelectionCount < roundsOf) {
+        return res.responseError("Not enough selections for the tournament");
+    }
 
     const selections = await Selection.findPair({
         where: {gameId}
     });
 
-    if (selections.length < 2) {
-        return res.responseError("Not enough selections for the game");
-    }
-
     const tournament = await Tournament.create({
         gameId: gameId,
         roundsOf: roundsOf,
         currentRoundsOf: roundsOf,
+        createdAt: time()
     });
 
     return res.responseSuccess({
@@ -44,9 +55,9 @@ router.post("/start", async (req, res) => {
 });
 
 router.post("/pick", async (req, res) => {
-    const tournamentId = +req.body.tournamentId;
-    const pickedId = +req.body.pickedId;
-    const droppedId = +req.body.droppedId;
+    const tournamentId = Math.max(+req.body.tournamentId, 0);
+    const pickedId = Math.max(+req.body.pickedId, 0);
+    const droppedId = Math.max(+req.body.droppedId, 0);
 
     if (!tournamentId || !pickedId || !droppedId) {
         return res.responseError("Invalid tournament or selections");

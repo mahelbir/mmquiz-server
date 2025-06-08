@@ -4,8 +4,8 @@ import {hashBcrypt, verifyBcrypt} from "melperjs/node";
 import config from "../config/config.js";
 import basicAuthMiddleware from "../middlewares/basic-auth-middleware.js";
 import {time} from "melperjs";
-import {toString as getString} from "lodash-es";
 import jwt from "jsonwebtoken";
+import {getString} from "../config/packages.js";
 
 
 const router = await newRoute("/auth", [basicAuthMiddleware]);
