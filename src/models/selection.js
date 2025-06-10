@@ -1,4 +1,4 @@
-import {DataTypes, Model} from 'sequelize';
+import {DataTypes, Model, Op} from 'sequelize';
 import {sequelize} from "../config/database.js";
 
 class Selection extends Model {
@@ -10,6 +10,21 @@ class Selection extends Model {
     static findPair(options) {
         options.limit = 2;
         return this.findAllRandom(options);
+    }
+
+    static async paginate(offset = 0, limit = 10, query = {}) {
+        const where = query.where || {};
+        const {rows, count} = await this.findAndCountAll({
+            where,
+            limit,
+            offset,
+            order: [['id', 'DESC']]
+        });
+
+        return {
+            rows,
+            count
+        };
     }
 }
 

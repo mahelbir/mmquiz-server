@@ -17,7 +17,7 @@ class Game extends Model {
             ];
         }
 
-        const {rows, count} = await Game.findAndCountAll({
+        const {rows, count} = await this.findAndCountAll({
             where,
             limit,
             offset,

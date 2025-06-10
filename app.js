@@ -1,3 +1,5 @@
+import path from "path";
+
 import express from 'express';
 import createError from 'http-errors';
 import compression from 'compression';
@@ -11,6 +13,7 @@ import router from './src/core/router.js';
 import packages from "./src/config/packages.js";
 import {responseError, responseJSON} from "./src/middlewares/global-middleware.js";
 import models from "./src/models/models.js";
+import * as fs from "node:fs";
 
 
 // system
@@ -21,6 +24,8 @@ app.use(timeout.handler({
         return res.status(503).send('Request Timeout');
     }
 }));
+const staticPath = path.join(config.path.root, 'static');
+app.use("/static", express.static(staticPath));
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb', parameterLimit: 50000, extended: true}));
 app.use((req, res, next) => {
@@ -30,6 +35,8 @@ app.use((req, res, next) => {
 
 
 // application
+fs.mkdirSync(staticPath, {recursive: true});
+fs.mkdirSync(config.path.appStorage, {recursive: true});
 await packages();
 app.use(helmet({
     contentSecurityPolicy: false,
