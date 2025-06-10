@@ -4,15 +4,31 @@ import basicAuthMiddleware from "../middlewares/basic-auth-middleware.js";
 import {getString} from "../config/packages.js";
 import {paginate, rowText} from "../utils/helper.js";
 import Game, {GameVisibility} from "../models/game.js";
+import Selection from "../models/selection.js";
 
 
 const router = await newRoute("/games");
 
 router.post("/list", basicAuthMiddleware, async (req, res) => {
+    const includeNsfw = req.body.includeNsfw !== false;
     const query = {
+        where: {
+            visibility: GameVisibility.PUBLIC
+        },
         search: getString(req.body.search)
     };
+    if (!includeNsfw) {
+        query.where.isNsfw = false;
+    }
     const result = await paginate(Game, req.body.pageNumber, req.body.pageSize, req.body.buttonCount, query);
+    for (let i = 0; i < result.items.length; i++) {
+        const item = await result.items[i];
+        item.dataValues.totalSelectionCount = await Selection.count({
+            where: {
+                gameId: item.id
+            }
+        });
+    }
     return res.responseSuccess(result);
 });
 

@@ -4,6 +4,7 @@ import Tournament from "./tournament.js";
 import Game from "./game.js";
 import Selection from "./selection.js";
 import Pick from "./pick.js";
+import User from "./user.js";
 
 sequelize.authenticate().then(async () => {
     const result = await sequelize.query('SELECT VERSION() AS version', {
@@ -20,6 +21,10 @@ export default (app) => {
         foreignKey: 'gameId',
         as: 'game'
     });
+    Game.hasMany(Tournament, {
+        foreignKey: 'gameId',
+        as: 'tournaments'
+    });
     Selection.belongsTo(Game, {
         foreignKey: 'gameId',
         as: 'game'
@@ -27,6 +32,14 @@ export default (app) => {
     Game.hasMany(Selection, {
         foreignKey: 'gameId',
         as: 'selections'
+    });
+    Game.belongsTo(User, {
+        foreignKey: 'userId',
+        as: 'user'
+    });
+    User.hasMany(Game, {
+        foreignKey: 'userId',
+        as: 'games'
     });
     Pick.belongsTo(Tournament, {
         foreignKey: 'tournamentId',

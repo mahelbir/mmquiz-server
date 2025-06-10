@@ -1,7 +1,7 @@
 {
   "apps": [
     {
-      "name": "server",
+      "name": "mmquiz",
       "script": "npm",
       "args": "start",
       "env": {

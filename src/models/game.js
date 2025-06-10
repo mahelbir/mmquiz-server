@@ -9,7 +9,7 @@ export const GameVisibility = Object.freeze({
 
 class Game extends Model {
     static async paginate(offset = 0, limit = 10, query = {}) {
-        const where = {};
+        const where = query.where || {};
         if (query.search) {
             where[Op.or] = [
                 {name: {[Op.like]: '%' + query.search + '%'}},
@@ -18,7 +18,7 @@ class Game extends Model {
         }
 
         const {rows, count} = await Game.findAndCountAll({
-            where: where,
+            where,
             limit,
             offset,
             order: [['id', 'DESC']]
