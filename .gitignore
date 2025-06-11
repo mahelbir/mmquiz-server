@@ -313,3 +313,4 @@ package-lock.json
 test*
 !src/routes/test.js
 src/storage/*
+static/

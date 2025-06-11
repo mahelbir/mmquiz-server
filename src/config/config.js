@@ -3,6 +3,7 @@ import {rootPath} from "../core/core.js";
 
 const pathConfig = {root: rootPath()};
 pathConfig.source = path.join(pathConfig.root, "src/");
+pathConfig.static = path.join(pathConfig.root, "static/");
 pathConfig.storage = path.join(pathConfig.source, "storage/");
 pathConfig.appStorage = path.join(pathConfig.storage, "app/");
 

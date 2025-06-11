@@ -87,8 +87,8 @@ router.post("/create", jwtAuthMiddleware, async (req, res) => {
     if (errorGameFields) {
         return errorGameFields;
     }
-    await Game.create(row);
-    return res.responseSuccess(row);
+    const game = await Game.create(row);
+    return res.responseSuccess(game);
 });
 
 async function paginateGames(req, res, paginationQuery) {
