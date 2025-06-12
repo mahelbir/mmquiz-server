@@ -47,10 +47,9 @@ router.post("/start", async (req, res) => {
     });
 
     return res.responseSuccess({
-        tournament: {
-            id: tournament.id,
-        },
-        selections: selections,
+        game,
+        tournament,
+        selections,
     });
 });
 

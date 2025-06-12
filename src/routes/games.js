@@ -97,6 +97,9 @@ async function paginateGames(req, res, paginationQuery) {
     if (!includeNsfw) {
         paginationQuery.where.isNsfw = false;
     }
+    if (req.body.hasOwnProperty("visibility") && Object.values(GameVisibility).includes(+req.body.visibility)) {
+        paginationQuery.where.visibility = +req.body.visibility;
+    }
     const result = await paginate(Game, req.body.pageNumber, req.body.pageSize, req.body.buttonCount, paginationQuery);
     for (let i = 0; i < result.items.length; i++) {
         const item = await result.items[i];

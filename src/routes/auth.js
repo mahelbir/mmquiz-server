@@ -23,7 +23,7 @@ router.post("/login", async (req, res) => {
         attributes: ['id', 'username', 'password']
     });
     if (!user || !verifyBcrypt(password, user.password, config.env.SECRET_KEY)) {
-        return res.responseError("Invalid username or password");
+        return res.responseError("Username or password is incorrect");
     }
 
     const payload = {

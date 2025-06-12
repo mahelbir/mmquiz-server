@@ -24,10 +24,9 @@ app.use(timeout.handler({
         return res.status(503).send('Request Timeout');
     }
 }));
-const staticPath = path.join(config.path.root, 'static');
-app.use("/static", express.static(staticPath));
+app.use("/static", express.static(config.path.static));
 app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb', parameterLimit: 50000, extended: true}));
+app.use(express.urlencoded({limit: '50mb', parameterLimit: 5000000, extended: true}));
 app.use((req, res, next) => {
     req.body = req.body || {};
     next();
@@ -35,7 +34,7 @@ app.use((req, res, next) => {
 
 
 // application
-fs.mkdirSync(staticPath, {recursive: true});
+fs.mkdirSync(config.path.static, {recursive: true});
 fs.mkdirSync(config.path.appStorage, {recursive: true});
 await packages();
 app.use(helmet({
