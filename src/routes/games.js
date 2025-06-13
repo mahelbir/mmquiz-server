@@ -38,24 +38,34 @@ router.post("/get", basicAuthMiddleware, async (req, res) => {
     if (row.visibility === GameVisibility.PRIVATE) {
         return res.responseError("You do not have permission for this game", 403);
     }
+    row.dataValues.totalSelectionCount = await Selection.count({
+        where: {
+            gameId: row.id
+        }
+    });
     return res.responseSuccess(row);
 });
 
 router.post("/get-my", jwtAuthMiddleware, async (req, res) => {
     const id = +req.body.id;
-    const game = await Game.findOne({
+    const row = await Game.findOne({
         where: {
             id: id
         }
     });
-    if (!game) {
+    if (!row) {
         return res.responseError("Game not found", 404);
     }
-    const errorUserPermission = req.verifyUserPermission(game.userId);
+    row.dataValues.totalSelectionCount = await Selection.count({
+        where: {
+            gameId: row.id
+        }
+    });
+    const errorUserPermission = req.verifyUserPermission(row.userId);
     if (errorUserPermission) {
         return errorUserPermission;
     }
-    return res.responseSuccess(game);
+    return res.responseSuccess(row);
 });
 
 router.post("/update", jwtAuthMiddleware, async (req, res) => {
