@@ -1,9 +1,9 @@
-import example from "../scripts/example.js";
+import cleanup from "../scripts/cleanup.js";
 
 
 export default [
     {
-        "script": example,
-        "args": ["p1"]
+        "script": cleanup,
+        "args": []
     }
 ];
