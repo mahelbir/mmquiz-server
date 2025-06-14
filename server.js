@@ -1,6 +1,5 @@
 import * as http from 'http';
 import app from './app.js';
-import socket from './src/core/socket.js';
 import config from './src/config/config.js';
 
 /**
@@ -14,13 +13,6 @@ app.set('port', port);
  */
 
 let server = http.createServer(app);
-
-/**
- * Initialize WebSocket
- */
-
-app.locals.SOCKET_AUTH = socket.init(server);
-app.set('socketAuth', app.locals.SOCKET_AUTH);
 
 /**
  * Listen on provided port, on all network interfaces.
