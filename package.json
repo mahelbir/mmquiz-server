@@ -2,13 +2,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node server.js",
-    "dev": "cross-env NODE_ENV=development npx nodemon server.js --ext js,twig,env"
+    "start": "npx cross-env NODE_ENV=production node server.js",
+    "dev": "npx cross-env NODE_ENV=development npx nodemon server.js --ext js,twig,env"
   },
   "dependencies": {
     "@mahelbir/settings": "^2.0.0",
     "compression": "^1.8.0",
-    "dotenv": "^16.5.0",
+    "dotenv": "^17.0.1",
     "express": "^5.1.0",
     "express-timeout-handler": "^2.2.2",
     "glob": "^11.0.3",

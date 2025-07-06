@@ -1,5 +1,3 @@
-import path from "path";
-
 import express from 'express';
 import createError from 'http-errors';
 import compression from 'compression';
@@ -11,7 +9,7 @@ import config from './src/config/config.js';
 import scripter from './src/core/scripter.js';
 import router from './src/core/router.js';
 import packages from "./src/config/packages.js";
-import {responseError, responseJSON} from "./src/middlewares/global-middleware.js";
+import {responseJSON} from "./src/middlewares/global-middleware.js";
 import models from "./src/models/models.js";
 import * as fs from "node:fs";
 
@@ -72,7 +70,7 @@ app.use(function (err, req, res, next) {
     } catch {
         return res
             .status(500)
-            .send(responseError("Internal Server Error", 500));
+            .send(responseJSON(500, ["Internal Server Error"]));
     }
 });
 

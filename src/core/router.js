@@ -42,10 +42,12 @@ function sortRoutersBySpecificity(routers) {
     });
 }
 
+
 export default async (appInstance) => {
     app = appInstance;
     app.use(globalMiddleware);
-    await importAll(path.join(config.path.source, 'routes/**/*.js'));
+    const routesPath = path.posix.join(config.path.source, 'routes/**/*.js');
+    await importAll(routesPath);
     const sortedRouters = sortRoutersBySpecificity(routers);
     sortedRouters.forEach(({path, router}) => {
         app.use(path, router);

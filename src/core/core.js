@@ -1,10 +1,10 @@
 import path from 'path';
-import {fileURLToPath} from 'url';
+import {fileURLToPath, pathToFileURL} from 'url';
 
 import dotenv from 'dotenv';
 import {glob} from 'glob';
 
-dotenv.config({override: true})
+dotenv.config({override: true, quiet: true});
 
 export const rootPath = () => {
     const __filename = fileURLToPath(import.meta.url);
@@ -15,6 +15,8 @@ export const rootPath = () => {
 export async function importAll(folder) {
     const routeFiles = await glob(folder);
     for (const file of routeFiles) {
-        await import(file);
+        const absolutePath = path.resolve(file);
+        const fileUrl = pathToFileURL(absolutePath);
+        await import(fileUrl);
     }
 }

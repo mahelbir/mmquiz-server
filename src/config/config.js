@@ -17,5 +17,6 @@ export default {
         pass: process.env.DB_PASS
     },
     path: pathConfig,
-    env: process.env
+    env: process.env,
+    isDev: process.env.NODE_ENV !== "production",
 };
